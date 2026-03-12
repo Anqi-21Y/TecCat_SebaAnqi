@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JS_Proyrcto</title>
+</head>
+<body>
+
+    <header>
+        <!--Part 1 mostrar el nomre com promot-->
+    <h1>Gestor de Tareas</h1>
+    <p id="Hola"></p> <!--Mostrar el nombre con id-->
+    </header>
+
+    <main>
+        <!--Part 3-->
+        <section>
+            <h2>Añadir un tarea</h2>
+            <input id="taskInput" type="text" placeholder="Escribe una tarea">
+            <button id="addBtn">Añadir</button>
+            <ul id="taskList"></ul>
+        </section>
+
+        <script>
+            // Parte 1: Gestión de Identidad y Persistencia
+            window.addEventListener('load',()=>{
+                // examinar local si o no
+                let nombre = localStorage.getItem('usuario_nombre') // localStroage es para guardar el nombre indefinida
+
+                // si no hay nombre ,
+                if (!nombre){
+                    const regexNumero =  /\d/;
+                    
+                    do{
+                        nombre = prompt("Introducir tu numbre(NO NÚMERO): "); // intro nombre
+                    }while(regexNumero.test(nombre));// si nombre hay nuero pues loops
+
+                    // guardar en web storage
+                    localStorage.setItem('usuario_nombre', nombre);
+                }
+
+                const hola = document.getElementById("Hola");
+                hola.textContent = "Holaa" + nombre;
+
+            });
+
+
+            // Parte 3: Información y Lógica con Objetos Nativos 
+
+            // obtener los elementos del DOM
+            const input = document.getElementById("taskInput");
+            const btn = document.getElementById("addBtn");
+            const list = document.getElementById("taskList");
+
+            // añadir TAREA
+            function addTask(){
+                const text = input.value.trim(); // quitar el espacio de iniciar y final
+
+                if (text === ""){
+                    return;
+                }
+
+                // crear LI
+
+                const li = document.createElement("li");  // crear un variable de elemeto li
+                li.textContent= text; // Aquí es para muestra todos container que tiene
+
+                // click tarea para mostrar el container
+                li.addEventListener("click",function(){
+                    console.log("Tarea: ", text);
+
+                });
+
+
+                // btn de eliminar
+                const deleteBTN = document.createElement("button");
+                deleteBTN.textContent = "Eliminar"; // El botón que se muestra dice "Eliminar".
+
+                // ELIMINAR Y evitar la propagación de eventos
+                deleteBTN.addEventListener("click", function(e){ // event object
+                    e.stopPropagation(); // evitar la activación de eventos de clic de mostrar container
+                    li.remove();
+                });
+
+                // añdair btn a li
+                li.append(deleteBTN);
+
+                // añadir li a list
+                list.appendChild(li);
+
+                // Borrar el cuadro de entrada 
+
+                input.value = "";
+            }
+
+            btn.addEventListener("click", addTask);
+                
+        
+        </script>
+    </main>
+</body>
+</html>
